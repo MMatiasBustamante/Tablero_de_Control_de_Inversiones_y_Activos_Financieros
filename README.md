@@ -22,7 +22,7 @@ Primer proyecto autodidacta en análisis de datos.
 | Herramienta | Uso |
 |---|---|
 | Python (Pandas, NumPy) | Extracción, limpieza y métricas de riesgo |
-| SQL (SQLite) | Almacenamiento y consultas analíticas |
+| SQL (PostgreSQL) | Almacenamiento y consultas analíticas |
 | Google Sheets | Hoja de portafolio y análisis exploratorio |
 | Power BI | Dashboard interactivo final |
 
