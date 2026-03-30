@@ -1,0 +1,15 @@
+,ticker,nombre,categoria,cantidad
+0,SPY,SPDR S&P 500 ETF,ETFs,5
+1,QQQ,Invesco Nasdaq-100 ETF,ETFs,8
+2,DIA,SPDR Dow Jones ETF,ETFs,4
+3,EEM,iShares Mercados Emergentes ETF,ETFs,15
+4,AAPL,Apple,Acciones_USA,10
+5,MSFT,Microsoft,Acciones_USA,7
+6,GOOGL,Alphabet (Google),Acciones_USA,3
+7,AMZN,Amazon,Acciones_USA,4
+8,NVDA,NVIDIA,Acciones_USA,6
+9,GGAL,Grupo Financiero Galicia,Acciones_ARG,50
+10,YPF,YPF S.A.,Acciones_ARG,30
+11,PAM,Pampa Energía,Acciones_ARG,25
+12,BBAR,BBVA Argentina,Acciones_ARG,40
+13,BMA,Banco Macro,Acciones_ARG,20
