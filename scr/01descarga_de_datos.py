@@ -86,7 +86,9 @@ def main():
     guardar_csv(precios, "precios_todos.csv")
 
     print("\n4. Construccion de tabla de valor del portafolio...")
+    print(f"Filas antes de dropna: {len(precios)}")
     preciosLimpios = precios.dropna()
+    print(f"Filas después de dropna: {len(preciosLimpios)}")
     df_portafolio = construir_portafolio(preciosLimpios, PORTAFOLIO)
     guardar_csv(df_portafolio, "valor_portafolio.csv")
 
