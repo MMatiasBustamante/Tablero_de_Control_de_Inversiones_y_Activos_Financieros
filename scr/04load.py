@@ -28,6 +28,6 @@ tablas = {
 }
 
 for archivo, nombre_tabla in tablas.items():
-    df = pd.read_csv(DATA / archivo, index_col=0, parse_dates=True)
+    df = pd.read_csv(DATA / archivo, index_col=0, parse_dates=True, date_format="ISO8601")
     df.to_sql(nombre_tabla, engine, if_exists="replace", index=True)
     print(f"Tabla '{nombre_tabla}' cargada ({len(df)} filas)")

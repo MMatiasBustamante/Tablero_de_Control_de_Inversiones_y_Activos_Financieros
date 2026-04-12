@@ -53,7 +53,7 @@ def descargar_precios(tickers: list, inicio: str, fin: str) -> pd.DataFrame:
 
 def guardar_csv(df: pd.DataFrame, nombre: str):
     route = CarpetaData / nombre
-    df.to_csv(route)
+    df.to_csv(route, decimal=",")
     print(f"Csv Guardado: {route} ({df.shape[0]} fila x {df.shape[1]} columnas)")
 
 def construir_portafolio(precios: pd.DataFrame, portafolio: dict) -> pd.DataFrame:
@@ -66,6 +66,7 @@ def construir_portafolio(precios: pd.DataFrame, portafolio: dict) -> pd.DataFram
     cantidades = pd.Series(portafolio)
     valor_posiciones = precios.multiply(cantidades, axis="columns")
     valor_posiciones["Total_portafolio"] = valor_posiciones.sum(axis=1)
+    valor_posiciones = valor_posiciones.round(2)
     return valor_posiciones
 
 def main():

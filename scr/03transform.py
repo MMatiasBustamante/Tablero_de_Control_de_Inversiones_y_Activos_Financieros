@@ -43,6 +43,6 @@ metricas = pd.DataFrame({
     "max_drawdown":      drawdown,
 }).round(4)
 
-metricas.to_csv(CarpetaData / "metricas_riesgo.csv")
+metricas.to_csv(CarpetaData / "metricas_riesgo.csv", decimal=",")
 print(metricas)
 print("metricas_riesgo.csv guardado correctamente")
