@@ -27,7 +27,24 @@ tablas = {
     "referencia_activos.csv": "referencia_activos",
 }
 
-for archivo, nombre_tabla in tablas.items():
+# Archivos con formato estándar (separador coma, índice = fecha)
+archivos_estandar = {
+    "precios_limpios.csv":    "precios_limpios",
+    "valor_portafolio.csv":   "valor_portafolio",
+    "referencia_activos.csv": "referencia_activos"
+}
+
+# Archivos con formato europeo (separador ; , índice = nombre de activo)
+archivos_metricas = {
+    "metricas_riesgo.csv":    "metricas_riesgo"
+}
+
+for archivo, nombre_tabla in archivos_estandar.items():
     df = pd.read_csv(DATA / archivo, index_col=0, parse_dates=True, date_format="ISO8601")
+    df.to_sql(nombre_tabla, engine, if_exists="replace", index=True)
+    print(f"Tabla '{nombre_tabla}' cargada ({len(df)} filas)")
+
+for archivo, nombre_tabla in archivos_metricas.items():
+    df = pd.read_csv(DATA / archivo, sep=";", decimal=",", index_col=0)
     df.to_sql(nombre_tabla, engine, if_exists="replace", index=True)
     print(f"Tabla '{nombre_tabla}' cargada ({len(df)} filas)")
