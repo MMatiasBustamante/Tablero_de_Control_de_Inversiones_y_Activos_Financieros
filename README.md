@@ -82,22 +82,22 @@ El dashboard está dividido en 4 páginas:
 ### Página 1 — Resumen del portafolio
 Vista general del portafolio. Muestra el valor total, el activo con mejor Sharpe Ratio, el de mayor retorno anual y el de peor drawdown. Pensada para una lectura rápida del estado del portafolio.
 
-> 📷 *[Agregar captura]*
+> 📷 ![Página 1](img/pagina1.png)
 
 ### Página 2 — Análisis por activo
 Comparación entre activos. Incluye un gráfico de barras con el retorno anual por ticker, una tabla completa con todas las métricas y un segmentador para filtrar por categoría (ETFs, acciones USA, acciones ARG).
 
-> 📷 *[Agregar captura]*
+> 📷 ![Página 2](img/Pagina2.png)
 
 ### Página 3 — Análisis de riesgo
 Visualización de la relación riesgo/retorno. El gráfico de dispersión Sharpe vs Volatilidad permite identificar los activos más eficientes: los que están arriba a la izquierda tienen buen retorno ajustado al riesgo con baja volatilidad. Los que están abajo a la derecha toman mucho riesgo con poco retorno. Complementado con un gráfico de barras de Maximum Drawdown por activo.
 
-> 📷 *[Agregar captura]*
+> 📷 ![Página 3](img/pagina3.png)
 
 ### Página 4 — Evolución por activo
 Gráfico de líneas con los precios históricos filtrable por ticker. Permite ver cómo evolucionó cada activo individualmente a lo largo del tiempo.
 
-> 📷 *[Agregar captura]*
+> 📷 ![Página 4](img/pagina4.png)
 
 ---
 
