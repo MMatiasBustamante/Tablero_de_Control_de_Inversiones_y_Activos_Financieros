@@ -174,7 +174,7 @@ Luego abrir el archivo `powerbi/tablero.pbix` y actualizar los datos desde Power
 
 ## 👤 Autor
 
-Desarrollado por **[Tu nombre]**
+Desarrollado por **Matias Bustamante**
 Análista de Datos Jr. |Estudiante de Programación
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Conectar-blue)](https://www.linkedin.com/in/matias-bustamante-252307266/)
