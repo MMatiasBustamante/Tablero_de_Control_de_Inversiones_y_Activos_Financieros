@@ -1,14 +1,60 @@
-# Tablero de Control de Inversiones y Activos Financieros
+# Análisis de Riesgo y Eficiencia de Portafolios de Inversión
 
-> Proyecto de análisis de datos para portfolio personal. Integra Python, SQL y Power BI para construir un dashboard interactivo de seguimiento y análisis de riesgo de inversiones.
+> ¿Cómo puede un analista evaluar la eficiencia riesgo/retorno de un portafolio diversificado para identificar activos que destruyen valor y generar criterios de rebalanceo basados en datos?
 
 ---
 
-## 📌 Descripción
+## 📌 Contexto y problema de negocio
 
-Este proyecto automatiza el seguimiento de un portafolio de 14 activos financieros (ETFs americanos y acciones de EE.UU. y Argentina) desde la descarga de datos históricos hasta la visualización interactiva en Power BI. Incluye cálculo de métricas de riesgo estándar de la industria: retorno anual, volatilidad, Sharpe Ratio y Maximum Drawdown.
+Uno de los principales desafíos en la gestión de inversiones —tanto para usuarios individuales como para plataformas fintech— es distinguir qué activos dentro de un portafolio realmente aportan retorno ajustado al riesgo y cuáles lo deterioran sin que el inversor lo note.
 
-Es mi primer proyecto autodidacta en análisis de datos, desarrollado mientras curso la Diplomatura en Gestión y Análisis de Datos de la UBA y la carrera de Programación.
+El problema no es la falta de datos: los precios históricos son públicos y accesibles. El problema es la falta de un sistema que los procese, calcule métricas de riesgo estándar de la industria y los presente de forma que habiliten decisiones concretas: **¿qué activo conviene mantener, cuál rebalancear y cuál salir?**
+
+Este proyecto construye ese sistema de principio a fin: desde la extracción automatizada de datos históricos hasta un dashboard interactivo que responde esas preguntas para un portafolio de 14 activos financieros (ETFs americanos, acciones de EE.UU. y acciones argentinas).
+
+---
+
+## 💡 Principales hallazgos
+
+El análisis revela tres patrones accionables sobre el portafolio:
+
+1. **Eficiencia riesgo/retorno desigual**: el gráfico Sharpe vs. Volatilidad (Página 3) permite identificar rápidamente qué activos ofrecen buen retorno ajustado al riesgo y cuáles asumen alta volatilidad con bajo retorno —los candidatos prioritarios a revisión o salida.
+
+2. **Exposición asimétrica por mercado**: los activos argentinos (GGAL, YPF, PAM, BBAR, BMA) muestran patrones de volatilidad y drawdown notablemente distintos a los activos estadounidenses, lo que refleja el riesgo sistémico del mercado local y su impacto en la composición del portafolio.
+
+3. **Maximum Drawdown como señal de alerta**: algunos activos presentan caídas históricas desde su pico que superan umbrales razonables de tolerancia al riesgo, lo que justifica una política automática de alerta o rebalanceo.
+
+> **Decisión que habilita este análisis**: un equipo de producto o de inversiones podría usar estas métricas para definir reglas automáticas de alerta —por ejemplo, notificar a un usuario cuando un activo cae por debajo de un Sharpe mínimo o supera un umbral de drawdown— mejorando la retención y la confianza en la plataforma.
+
+---
+
+## 📊 Dashboard — Power BI
+
+El dashboard está dividido en cuatro páginas, cada una orientada a responder una pregunta de negocio específica.
+
+### Página 1 — Resumen del portafolio
+
+Vista ejecutiva del portafolio. Muestra el valor total, el activo con mejor Sharpe Ratio, el de mayor retorno anual y el de peor drawdown. Diseñada para una lectura rápida del estado general: **¿el portafolio está funcionando bien en términos agregados?**
+
+> 📷 ![Página 1](img/pagina1.png)
+
+### Página 2 — Análisis por activo
+
+Comparación detallada entre activos. Incluye un gráfico de barras con el retorno anual por ticker, una tabla completa con todas las métricas y un segmentador para filtrar por categoría (ETFs, acciones USA, acciones ARG). Responde: **¿qué activos lideran el retorno y cuáles quedan rezagados?**
+
+> 📷 ![Página 2](img/Pagina2.png)
+
+### Página 3 — Análisis de riesgo
+
+La página central del análisis estratégico. El gráfico de dispersión Sharpe vs. Volatilidad permite identificar los activos más eficientes: los ubicados arriba a la izquierda tienen buen retorno ajustado al riesgo con baja volatilidad; los ubicados abajo a la derecha asumen mucho riesgo con poco retorno. Complementado con un gráfico de barras de Maximum Drawdown por activo. Responde: **¿qué activos conviene mantener y cuáles representan riesgo injustificado?**
+
+> 📷 ![Página 3](img/pagina3.png)
+
+### Página 4 — Evolución histórica
+
+Gráfico de líneas con los precios históricos, filtrable por ticker. Permite analizar el comportamiento de cada activo a lo largo del tiempo y detectar patrones de recuperación tras caídas. Responde: **¿cómo reaccionó cada activo ante distintos contextos de mercado?**
+
+> 📷 ![Página 4](img/pagina4.png)
 
 ---
 
@@ -30,80 +76,70 @@ Es mi primer proyecto autodidacta en análisis de datos, desarrollado mientras c
 
 ---
 
-## 🛠️ Stack utilizado
-
-| Herramienta | Uso |
-|---|---|
-| Python (Pandas, NumPy) | Extracción, limpieza y cálculo de métricas de riesgo |
-| yfinance | API para descarga de precios históricos |
-| SQL (PostgreSQL) | Almacenamiento estructurado y consultas analíticas |
-| SQLAlchemy | Conexión entre Python y PostgreSQL |
-| Power BI | Dashboard interactivo final |
-
----
-
 ## ⚙️ Pipeline de datos
 
-El proyecto corre en 4 scripts secuenciales:
+El proyecto corre en cuatro scripts secuenciales que cubren el ciclo completo de datos: extracción, limpieza, transformación y carga.
 
 ### `01_descarga_de_datos.py`
-Conecta a la API de yfinance y descarga los precios históricos de los 14 activos. Construye la tabla del portafolio con la composición de activos y genera la tabla de referencia con la categoría de cada ticker (ETF, acción USA, acción ARG). Guarda todo en archivos CSV en la carpeta `/data`.
+Conecta a la API de yfinance y descarga los precios históricos de los 14 activos. Construye la tabla del portafolio con la composición de activos y genera la tabla de referencia con la categoría de cada ticker (ETF, acción USA, acción ARG). Guarda los resultados en archivos CSV en la carpeta `/data`.
 
 ### `02_notebook_etl.py`
-Limpieza y normalización de los datos crudos. Maneja valores faltantes, verifica consistencia de fechas y genera el archivo `precios_limpios.csv` listo para el análisis.
+Limpieza y normalización de los datos crudos. Maneja valores faltantes, verifica la consistencia de fechas y genera el archivo `precios_limpios.csv` listo para el análisis.
 
 ### `03_transform.py`
 Calcula las métricas de riesgo a partir de los precios limpios:
-- **Retornos diarios** con `pct_change()`
-- **Retorno anual** (retorno diario promedio × 252 días hábiles)
-- **Volatilidad anual** (desvío estándar × √252)
-- **Sharpe Ratio** (retorno ajustado por riesgo, usando tasa libre de riesgo del 5%)
-- **Maximum Drawdown** (máxima caída desde el pico histórico)
+
+| Métrica | Definición |
+|---|---|
+| Retorno anual | Retorno diario promedio × 252 días hábiles |
+| Volatilidad anual | Desvío estándar de retornos diarios × √252 |
+| Sharpe Ratio | Retorno ajustado al riesgo (tasa libre de riesgo: 5%) |
+| Maximum Drawdown | Máxima caída porcentual desde el pico histórico |
 
 Guarda los resultados en `metricas_riesgo.csv`.
 
 ### `04_load.py`
 Carga todas las tablas CSV a PostgreSQL usando SQLAlchemy. Reemplaza las tablas existentes en cada ejecución para mantener los datos actualizados.
 
-Para actualizar el dashboard completo, correr los scripts en orden:
-```bash
-python scr/01_descarga_de_datos.py
-python scr/02_notebook_etl.py
-python scr/03_transform.py
-python scr/04_load.py
-```
+---
+
+## 🛠️ Stack utilizado
+
+| Herramienta | Rol en el proyecto |
+|---|---|
+| Python (Pandas, NumPy) | Extracción, limpieza y cálculo de métricas de riesgo |
+| yfinance | API para descarga de precios históricos |
+| PostgreSQL | Almacenamiento estructurado y consultas analíticas |
+| SQLAlchemy | Conexión entre Python y PostgreSQL |
+| Power BI | Dashboard interactivo final |
 
 ---
 
-## 📊 Dashboard — Power BI
+## 📈 Activos analizados
 
-El dashboard está dividido en 4 páginas:
-
-### Página 1 — Resumen del portafolio
-Vista general del portafolio. Muestra el valor total, el activo con mejor Sharpe Ratio, el de mayor retorno anual y el de peor drawdown. Pensada para una lectura rápida del estado del portafolio.
-
-> 📷 ![Página 1](img/pagina1.png)
-
-### Página 2 — Análisis por activo
-Comparación entre activos. Incluye un gráfico de barras con el retorno anual por ticker, una tabla completa con todas las métricas y un segmentador para filtrar por categoría (ETFs, acciones USA, acciones ARG).
-
-> 📷 ![Página 2](img/Pagina2.png)
-
-### Página 3 — Análisis de riesgo
-Visualización de la relación riesgo/retorno. El gráfico de dispersión Sharpe vs Volatilidad permite identificar los activos más eficientes: los que están arriba a la izquierda tienen buen retorno ajustado al riesgo con baja volatilidad. Los que están abajo a la derecha toman mucho riesgo con poco retorno. Complementado con un gráfico de barras de Maximum Drawdown por activo.
-
-> 📷 ![Página 3](img/pagina3.png)
-
-### Página 4 — Evolución por activo
-Gráfico de líneas con los precios históricos filtrable por ticker. Permite ver cómo evolucionó cada activo individualmente a lo largo del tiempo.
-
-> 📷 ![Página 4](img/pagina4.png)
+| Ticker | Tipo | Mercado |
+|--------|------|---------|
+| SPY | ETF | USA |
+| QQQ | ETF | USA |
+| DIA | ETF | USA |
+| EEM | ETF | USA |
+| AAPL | Acción | USA |
+| MSFT | Acción | USA |
+| GOOGL | Acción | USA |
+| AMZN | Acción | USA |
+| NVDA | Acción | USA |
+| GGAL | Acción | ARG |
+| YPF | Acción | ARG |
+| PAM | Acción | ARG |
+| BBAR | Acción | ARG |
+| BMA | Acción | ARG |
 
 ---
 
 ## 🚀 Cómo ejecutar el proyecto
 
 ### Requisitos
+
 - Python 3.10+
 - PostgreSQL
 - Power BI Desktop
@@ -111,7 +147,7 @@ Gráfico de líneas con los precios históricos filtrable por ticker. Permite ve
 ### Instalación
 
 ```bash
-git clone https://github.com/tu-usuario/Proyecto-Tablero-de-Control-de-Inversiones-y-Activos-Financieros
+git clone https://github.com/MMatiasBustamante/Proyecto-Tablero-de-Control-de-Inversiones-y-Activos-Financieros
 cd Proyecto-Tablero-de-Control-de-Inversiones-y-Activos-Financieros
 pip install -r requirements.txt
 ```
@@ -141,41 +177,11 @@ Luego abrir el archivo `powerbi/tablero.pbix` y actualizar los datos desde Power
 
 ---
 
-## 📈 Activos analizados
-
-| Ticker | Tipo | Mercado |
-|--------|------|---------|
-| SPY | ETF | USA |
-| QQQ | ETF | USA |
-| DIA | ETF | USA |
-| EEM | ETF | USA |
-| AAPL | Acción | USA |
-| MSFT | Acción | USA |
-| GOOGL | Acción | USA |
-| AMZN | Acción | USA |
-| NVDA | Acción | USA |
-| GGAL | Acción | ARG |
-| YPF | Acción | ARG |
-| PAM | Acción | ARG |
-| BBAR | Acción | ARG |
-| BMA | Acción | ARG |
-
----
-
-## 🧠 Conceptos aplicados
-
-- Extracción de datos desde APIs financieras
-- ETL (Extract, Transform, Load)
-- Cálculo de métricas de riesgo financiero
-- Modelado de base de datos relacional
-- Visualización de datos e interpretación de resultados
-
----
-
 ## 👤 Autor
 
-Desarrollado por **Matias Bustamante**
-Análista de Datos Jr. |Estudiante de Programación
+Desarrollado por **Matías Bustamante**  
+Analista de Datos | Estudiante de Programación  
+Diplomatura en Gestión y Análisis de Datos — UBA
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Conectar-blue)](https://www.linkedin.com/in/matias-bustamante-252307266/)
 [![GitHub](https://img.shields.io/badge/GitHub-Perfil-black)](https://github.com/MMatiasBustamante)
